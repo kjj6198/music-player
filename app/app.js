@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    min-height: 100%;
+    height: 100%;
   }
 `;
 

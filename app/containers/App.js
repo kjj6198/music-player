@@ -17,6 +17,10 @@ const Wrapper = styled.div`
   background-color: #171d1a;
 `;
 
+const Main = styled.div`
+  flex-grow: 1;
+`;
+
 const SongOverview = Lazy({
   loader: () => import(/* webpackChunkName: "Song" */ '../components/SongOverview'),
 });
@@ -24,10 +28,12 @@ const SongOverview = Lazy({
 const App = () => (
   <Provider>
     <Wrapper>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/albums/:id" component={SongOverview} />
-      </Switch>
+      <Main>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/albums/:id" component={SongOverview} />
+        </Switch>
+      </Main>
     </Wrapper>
   </Provider>
 );
