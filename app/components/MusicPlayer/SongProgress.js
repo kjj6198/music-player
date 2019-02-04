@@ -1,3 +1,4 @@
+// [TODO] naming is not good.
 import React, { Component, createRef } from 'react';
 import { fromEvent, animationFrameScheduler } from 'rxjs';
 import {
@@ -9,12 +10,15 @@ import {
   startWith,
   observeOn,
   filter,
+  tap,
 } from 'rxjs/operators';
 import styled from 'styled-components';
 
 export const SongProgressWrapper = styled.div`
   position: relative;
   width: 100%;
+  max-width: 500px;
+  margin: 0 10px;
   height: 6px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -35,7 +39,7 @@ export const ProgressFill = styled.div.attrs(props => ({
     width: `${(props.current || 0) * 100}%`,
   },
 }))`
-  pointer-event: none;
+  pointer-events: none;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -43,6 +47,7 @@ export const ProgressFill = styled.div.attrs(props => ({
   height: 100%;
   background-color: #fff;
   left: 0;
+  border-radius: 5px;
 `;
 
 export const Indicator = styled.button.attrs(props => ({
@@ -57,12 +62,14 @@ export const Indicator = styled.button.attrs(props => ({
   height: 15px;
   border-radius: 50%;
   appearance: none;
+  curosr: pointer;
   transform: translate(-7.5px);
   transform-origin: center;
   background-color: #fff;
+  transition: box-shadow 0.2s ease;
   &:focus {
     outline: none;
-    box-shadow: 0 0 5px 3px rgba(125, 125, 125, 0.5);
+    box-shadow: 0 0 5px 5px rgba(200, 200, 200, 0.5);
   }
 `;
 
@@ -73,8 +80,8 @@ export default class SongProgress extends Component {
 
   componentDidMount() {
     const { offsetWidth: width } = this.bar.current;
-    const { setCurrentTime } = this.props;
-    fromEvent(this.bar.current, 'mousedown')
+    const { setCurrent } = this.props;
+    this.slide$ = fromEvent(this.bar.current, 'mousedown')
       .pipe(
         merge(
           fromEvent(this.indicator.current, 'mousedown').pipe(
@@ -86,14 +93,19 @@ export default class SongProgress extends Component {
         ),
         throttleTime(100),
         switchMap(({ offsetX: initialX, pageX: x }) => fromEvent(window, 'mousemove').pipe(
-          takeUntil(fromEvent(window, 'mouseup')),
           map(e => (initialX + e.pageX - x) / width),
+          /* make button blur when mouse up */
+          takeUntil(fromEvent(window, 'mouseup').pipe(tap(() => document.activeElement.blur()))),
           startWith(initialX / width),
         )),
         filter(progress => progress <= 1 || progress >= 0),
         observeOn(animationFrameScheduler),
       )
-      .subscribe(setCurrentTime);
+      .subscribe(setCurrent);
+  }
+
+  componentWillUnmount() {
+    this.slide$.unsubscribe();
   }
 
   render() {

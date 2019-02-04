@@ -6,7 +6,9 @@ const Duration = styled.span.attrs(props => ({
 }))`
   color: #fff;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
 `;
 
 export default Duration;

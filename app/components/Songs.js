@@ -11,19 +11,20 @@ const Wrapper = styled.div`
   overflow-y: auto;
   salign-items: center;
   color: #fff;
+  padding: 10px 0;
 
   &:not(:last-child) {
-    margin-bottom: 16px;
     border-bottom: 1px solid rgba(100, 100, 100, 0.23);
   }
 `;
 
 const SongTitle = styled.h4`
   display: inline-block;
-  margin: 8px 0;
+  margin: 0;
   margin-left: 8px;
   font-size: 16px;
   font-weight: 400;
+  vertical-align: middle;
 `;
 
 export default function Songs({ songs, onPlayClick }) {

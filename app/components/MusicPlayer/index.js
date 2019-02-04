@@ -1,20 +1,9 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, Fragment } from 'react';
 import styled from 'styled-components';
 // import { playerContext } from './AudioProvider';
 import Player from '@/services/player';
 import Duration from './Duration';
 import SongProgress from './SongProgress';
-
-const Control = styled.div`
-  width: 100%;
-  margin: auto;
-  height: 40px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(34, 34, 34);
-`;
 
 const Audio = styled.audio.attrs(props => ({
   src: props.src,
@@ -86,17 +75,16 @@ export default class MusicPlayer extends Component {
     const { currentTime, duration } = this.state;
 
     return (
-      <Control>
+      <Fragment>
         <Duration duration={currentTime} />
-        <SongProgress current={currentTime / duration} setCurrentTime={this.setCurrentTime} />
+        <SongProgress current={currentTime / duration} setCurrent={this.setCurrentTime} />
         <Audio
           ref={this.audioRef}
-          controls
           onEnded={this.props.onEnded}
           onTimeUpdate={() => this.setState({ currentTime: this.player.currentTime })}
         />
         <Duration duration={duration} />
-      </Control>
+      </Fragment>
     );
   }
 }

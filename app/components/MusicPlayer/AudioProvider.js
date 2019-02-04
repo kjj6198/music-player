@@ -14,7 +14,10 @@ export default function AudioProvider({ children }) {
     <playerContext.Provider
       value={{
         ...state,
-        setState,
+        setContext: ({ audioRef, audio }) => setState({
+          audioRef,
+          audio,
+        }),
       }}
     >
       {children}
