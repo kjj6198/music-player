@@ -4,8 +4,9 @@ import useStore from '@/hooks/useStore';
 import Album from '@/components/Album';
 import Placeholder from '@/components/Placeholder';
 import useAlbumAPI from '@/hooks/useAlbumAPI';
+import range from '@/utils/range';
 
-const PlaceWrapper = styled.div`
+export const PlaceWrapper = styled.div`
   ${Placeholder} {
     &:not(:first-child) {
       margin-top: 8px;
@@ -15,9 +16,9 @@ const PlaceWrapper = styled.div`
 
 const AlbumPlaceholder = () => (
   <PlaceWrapper>
-    <Placeholder size={200} width={200} height={200} bgColor="#ddd" />
-    <Placeholder size={200} height={20} bgColor="#ddd" />
-    <Placeholder size={50} width={80} height={20} bgColor="#ddd" />
+    <Placeholder size={200} width={200} height={200} bgColor="#eee" />
+    <Placeholder size={200} height={20} bgColor="#eee" />
+    <Placeholder size={50} width={80} height={20} bgColor="#eee" />
   </PlaceWrapper>
 );
 
@@ -30,5 +31,5 @@ export default function AlbumProvider({ id }) {
       <Album key={name} author={author} name={name} imageURL={imageURL} />
     ));
   }
-  return <AlbumPlaceholder />;
+  return range(1).map(i => <AlbumPlaceholder key={i} />);
 }
