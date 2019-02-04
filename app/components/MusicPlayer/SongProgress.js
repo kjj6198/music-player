@@ -9,7 +9,6 @@ import {
   startWith,
   observeOn,
   filter,
-  tap,
 } from 'rxjs/operators';
 import styled from 'styled-components';
 
@@ -91,7 +90,7 @@ export default class SongProgress extends Component {
           map(e => (initialX + e.pageX - x) / width),
           startWith(initialX / width),
         )),
-        filter(volume => volume <= 1 || volume >= 0),
+        filter(progress => progress <= 1 || progress >= 0),
         observeOn(animationFrameScheduler),
       )
       .subscribe(setCurrentTime);
