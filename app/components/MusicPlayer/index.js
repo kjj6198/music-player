@@ -1,9 +1,10 @@
 import React, { Component, createRef, Fragment } from 'react';
 import styled from 'styled-components';
-// import { playerContext } from './AudioProvider';
+import { withAudioContext } from './AudioProvider';
 import Player from '@/services/player';
 import Duration from './Duration';
 import SongProgress from './SongProgress';
+import PlayerControl from './PlayerControls';
 
 const Audio = styled.audio.attrs(props => ({
   src: props.src,
@@ -15,7 +16,7 @@ const Audio = styled.audio.attrs(props => ({
   visibility: hidden;
 `;
 
-export default class MusicPlayer extends Component {
+class MusicPlayer extends Component {
   player = null;
 
   audioRef = createRef();
@@ -23,6 +24,7 @@ export default class MusicPlayer extends Component {
   state = {
     currentTime: 0,
     duration: 0,
+    isPaused: true,
   };
 
   componentDidMount = () => {
@@ -32,6 +34,11 @@ export default class MusicPlayer extends Component {
       src: this.props.src,
       onError: this.props.onError,
       onLoaded: this.onLoaded,
+    });
+
+    this.props.setContext({
+      audioRef: this.audioRef,
+      audio: this.audioRef.current,
     });
   };
 
@@ -71,8 +78,16 @@ export default class MusicPlayer extends Component {
     }
   };
 
+  handleControlClick = () => {
+    if (this.player) {
+      this.player.paused
+        ? this.setState({ isPaused: false }, () => this.player.play())
+        : this.setState({ isPaused: true }, () => this.player.pause());
+    }
+  };
+
   render() {
-    const { currentTime, duration } = this.state;
+    const { currentTime, duration, isPaused } = this.state;
 
     return (
       <Fragment>
@@ -84,7 +99,10 @@ export default class MusicPlayer extends Component {
           onTimeUpdate={() => this.setState({ currentTime: this.player.currentTime })}
         />
         <Duration duration={duration} />
+        <PlayerControl isPaused={isPaused} onClick={this.handleControlClick} />
       </Fragment>
     );
   }
 }
+
+export default withAudioContext(MusicPlayer);

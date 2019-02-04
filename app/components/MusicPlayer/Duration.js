@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import formatDuration from '@/utils/formatDuration';
 
 const Duration = styled.span.attrs(props => ({
-  children: formatDuration(props.duration),
+  children: props.loading ? 'loading...' : formatDuration(props.duration),
 }))`
   color: #fff;
   font-size: 12px;
@@ -11,4 +12,4 @@ const Duration = styled.span.attrs(props => ({
   font-variant-numeric: tabular-nums;
 `;
 
-export default Duration;
+export default memo(Duration);

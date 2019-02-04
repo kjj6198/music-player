@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import  from './MusicPlayer';
+import AudioProvider from './MusicPlayer/AudioProvider';
 import useStore from '@/hooks/useStore';
 import MusicPlayer from './MusicPlayer';
 import Songs from './Songs';
@@ -129,12 +129,14 @@ export default function SongOverview({ match }) {
           <h4>{currentSong.name.replace('.mp3', '')}</h4>
           <h5>{album.author}</h5>
           <Control>
-            <MusicPlayer
-              src={currentSong.url}
-              onLoaded={player => player.play()}
-              onEnded={() => setCurrentSong(nextSong(album.songs, currentSong))}
-              onError={console.log}
-            />
+            <AudioProvider>
+              <MusicPlayer
+                src={currentSong.url}
+                onLoaded={player => player.play()}
+                onEnded={() => setCurrentSong(nextSong(album.songs, currentSong))}
+                onError={console.log}
+              />
+            </AudioProvider>
           </Control>
         </BottomWrapper>
       )}

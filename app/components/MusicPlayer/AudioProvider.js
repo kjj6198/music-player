@@ -1,4 +1,4 @@
-import React, { createContext, createRef, useState } from 'react';
+import React, { createContext, createRef, useState, memo } from 'react';
 
 const initialState = {
   audio: null,
@@ -7,7 +7,7 @@ const initialState = {
 };
 export const playerContext = createContext(initialState);
 
-export default function AudioProvider({ children }) {
+function AudioProvider({ children }) {
   const [state, setState] = useState(initialState);
 
   return (
@@ -24,3 +24,13 @@ export default function AudioProvider({ children }) {
     </playerContext.Provider>
   );
 }
+
+export default memo(AudioProvider);
+
+export const withAudioContext = WrappedComponent => props => (
+  <playerContext.Consumer>
+    {({ audioRef, audio, setContext }) => (
+      <WrappedComponent audioRef={audioRef} audio={audio} setContext={setContext} {...props} />
+    )}
+  </playerContext.Consumer>
+);

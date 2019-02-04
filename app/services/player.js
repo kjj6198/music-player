@@ -30,8 +30,18 @@ export default class MusicPlayer {
     return this.audio.currentTime || 0;
   }
 
+  get paused() {
+    if (this.audio) {
+      return this.audio.paused;
+    }
+
+    return true;
+  }
+
   play = () => {
-    this.audio.play();
+    if (this.audio) {
+      this.audio.play();
+    }
   };
 
   destory = () => {
@@ -42,6 +52,8 @@ export default class MusicPlayer {
   };
 
   pause = () => {
-    this.audio.pause();
+    if (this.audio) {
+      this.audio.pause();
+    }
   };
 }
