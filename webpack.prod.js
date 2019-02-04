@@ -49,6 +49,7 @@ module.exports = config({
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
+    publicPath: './',
   },
   plugins,
 });
