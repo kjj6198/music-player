@@ -26,17 +26,7 @@ module.exports = options => ({
     ...options.output,
   },
 
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV:
-          process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'stage'
-            ? JSON.stringify('production')
-            : JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
-    ...options.plugins,
-  ],
+  plugins: options.plugins,
 
   devtool: 'cheap-module-source-map',
 

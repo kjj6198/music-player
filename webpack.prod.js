@@ -29,7 +29,7 @@ const plugins = [
     excludes: ['index.html'],
     caches: {
       main: [':rest:'],
-      additional: ['*.chunk.js', '*.svg', '*.png'],
+      additional: ['*.chunk.js', '*.png'],
     },
     responseStrategy: 'network-first',
   }),
