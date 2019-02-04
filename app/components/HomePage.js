@@ -39,7 +39,7 @@ const AlbumsContainer = styled.div`
   }
 `;
 
-const LazyAlbumProvider = Lazy({
+const AlbumProvider = Lazy({
   loader: () => import(/* webpackChunkName: "Album" */ '../containers/AlbumProvider'),
 });
 
@@ -51,7 +51,7 @@ export default function HomePage() {
       </Header>
       <Headline>熱門專輯</Headline>
       <AlbumsContainer>
-        <LazyAlbumProvider />
+        <AlbumProvider />
       </AlbumsContainer>
     </Wrapper>
   );

@@ -6,6 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 import Lazy from '@/components/LazyComponent';
 import Provider from '@/containers/Provider';
 import HomePage from '@/components/HomePage';
+import ErrorBlock from '@/components/ErrorBlock';
 
 // This is whole app entry, with hot module reload.
 // react-hot-loader will automatically handle production.
@@ -33,6 +34,7 @@ const App = () => (
           <Route exact path="/" component={HomePage} />
           <Route exact path="/albums/:id" component={SongOverview} />
         </Switch>
+        <ErrorBlock />
       </Main>
     </Wrapper>
   </Provider>
