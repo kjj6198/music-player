@@ -64,7 +64,7 @@ function Song({ song, onPlayClick }) {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const likes = Storage.get('likes');
+    const likes = Storage.get('likes') || {};
     if (likes[song.name]) {
       setLiked(true);
     }
