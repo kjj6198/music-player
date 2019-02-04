@@ -22,20 +22,35 @@ const SongTitle = styled.h4`
   display: inline-block;
   margin: 0;
   margin-left: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   vertical-align: middle;
+`;
+
+const PlayIcon = styled(SVG)`
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+`;
+
+const LikeIcon = styled(SVG)`
+  margin-right: 8px;
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 export default function Songs({ songs, onPlayClick }) {
   return songs.map(song => (
     <Wrapper key={song.name} onClick={() => onPlayClick(song)}>
       <div>
-        <SVG src={play} />
+        <PlayIcon src={play} />
         <SongTitle>{song.name.replace('.mp3', '')}</SongTitle>
       </div>
       <div>
-        <SVG src={like} />
+        <LikeIcon src={like} />
         <Duration duration={song.duration} />
       </div>
     </Wrapper>

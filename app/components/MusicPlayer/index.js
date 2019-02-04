@@ -1,10 +1,17 @@
-import React, { Component, createRef, Fragment } from 'react';
+import React, { Fragment, Component, createRef } from 'react';
 import styled from 'styled-components';
 import { withAudioContext } from './AudioProvider';
 import Player from '@/services/player';
 import Duration from './Duration';
 import SongProgress from './SongProgress';
 import PlayerControl from './PlayerControls';
+
+const Control = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Audio = styled.audio.attrs(props => ({
   src: props.src,
@@ -91,15 +98,24 @@ class MusicPlayer extends Component {
 
     return (
       <Fragment>
-        <Duration duration={currentTime} />
-        <SongProgress current={currentTime / duration} setCurrent={this.setCurrentTime} />
-        <Audio
-          ref={this.audioRef}
-          onEnded={this.props.onEnded}
-          onTimeUpdate={() => this.setState({ currentTime: this.player.currentTime })}
+        <Control>
+          <Duration duration={currentTime} />
+          <SongProgress current={currentTime / duration} setCurrent={this.setCurrentTime} />
+          <Audio
+            ref={this.audioRef}
+            onPlay={() => this.setState({ isPaused: false })}
+            onPause={() => this.setState({ isPaused: true })}
+            onEnded={this.props.onEnded}
+            onTimeUpdate={() => this.setState({ currentTime: this.player.currentTime })}
+          />
+          <Duration duration={duration} />
+        </Control>
+        <PlayerControl
+          isPaused={isPaused}
+          onClick={this.handleControlClick}
+          onNextClick={this.props.onNextClick}
+          onPrevClick={this.props.onPrevClick}
         />
-        <Duration duration={duration} />
-        <PlayerControl isPaused={isPaused} onClick={this.handleControlClick} />
       </Fragment>
     );
   }

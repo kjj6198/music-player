@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useReducer } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import AudioProvider from './MusicPlayer/AudioProvider';
@@ -8,6 +8,7 @@ import Songs from './Songs';
 
 const BottomWrapper = styled.div`
   width: 100%;
+  height: 156px;
   margin: auto;
   padding: 20px 0;
   position: fixed;
@@ -32,12 +33,6 @@ const BottomWrapper = styled.div`
   & > h6 {
     color: #4b4b4b;
   }
-`;
-
-const Control = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Wrapper = styled.div`
@@ -82,11 +77,16 @@ const AuthorTitle = styled.h4`
   margin: 6px 0;
 `;
 
-function nextSong(songs, currentSong) {
+function nextSong(songs, currentSong, selectNext = true) {
   let isLast = false;
+  let isFirst = false;
   let next = null;
+  let prev = null;
 
   songs.forEach((song, i) => {
+    if (i === 0) {
+      isFirst = true;
+    }
     if (i === songs.length - 1) {
       isLast = true;
     }
@@ -96,20 +96,47 @@ function nextSong(songs, currentSong) {
         [next] = songs;
       }
       next = songs[i + 1];
+
+      if (isFirst) {
+        [prev] = songs;
+      }
+
+      if (i - 1 >= 0) {
+        prev = songs[i - 1];
+      }
     }
   });
 
-  return next;
+  return selectNext ? next : prev;
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SELECT_SONG':
+      return {
+        currentSong: action.song,
+      };
+    case 'SELECT_NEXT_SONG':
+      return {
+        currentSong: nextSong(action.songs, state.currentSong),
+      };
+    case 'SELECT_PREV_SONG':
+      return {
+        currentSong: nextSong(action.songs, state.currentSong, false),
+      };
+    default:
+      return state;
+  }
 }
 
 export default function SongOverview({ match }) {
   const { id } = match.params;
   const { store } = useStore();
-  const [currentSong, setCurrentSong] = useState(null);
   if (!id || !store || !store.albums) {
     return <Redirect to="/" />;
   }
   const album = store.albums.filter(al => al.name === id)[0];
+  const [{ currentSong }, dispatch] = useReducer(reducer, { currentSong: album.songs[0] });
 
   return (
     <Wrapper>
@@ -121,25 +148,37 @@ export default function SongOverview({ match }) {
       </InfoWrapper>
 
       <SongListWrapper>
-        {album.songs && <Songs songs={album.songs} onPlayClick={setCurrentSong} />}
+        {album.songs && (
+          <Songs
+            songs={album.songs}
+            onPlayClick={song => dispatch({
+              type: 'SELECT_SONG',
+              song,
+            })
+            }
+          />
+        )}
       </SongListWrapper>
-      {currentSong && (
-        <BottomWrapper>
-          <h6>現正播放</h6>
-          <h4>{currentSong.name.replace('.mp3', '')}</h4>
-          <h5>{album.author}</h5>
-          <Control>
+      <BottomWrapper>
+        {currentSong && (
+          <Fragment>
+            <h6>現正播放</h6>
+            <h4>{currentSong.name.replace('.mp3', '')}</h4>
+            <h5>{album.author}</h5>
+
             <AudioProvider>
               <MusicPlayer
                 src={currentSong.url}
+                onNextClick={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
+                onPrevClick={() => dispatch({ type: 'SELECT_PREV_SONG', songs: album.songs })}
                 onLoaded={player => player.play()}
-                onEnded={() => setCurrentSong(nextSong(album.songs, currentSong))}
+                onEnded={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
                 onError={console.log}
               />
             </AudioProvider>
-          </Control>
-        </BottomWrapper>
-      )}
+          </Fragment>
+        )}
+      </BottomWrapper>
     </Wrapper>
   );
 }
