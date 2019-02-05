@@ -70,6 +70,7 @@ class MusicPlayer extends Component {
 
   onLoaded = () => {
     const { currentTime, duration } = this.audioRef.current;
+
     this.setState({ currentTime, duration }, () => {
       this.props.onLoaded(this.player);
     });

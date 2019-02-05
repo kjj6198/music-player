@@ -26,7 +26,7 @@ module.exports = options => ({
     ...options.output,
   },
 
-  plugins: options.plugins,
+  plugins: [...options.plugins],
 
   devtool: 'cheap-module-source-map',
 
