@@ -1,4 +1,6 @@
-import React, { memo, Fragment, useEffect, useContext } from 'react';
+import React, {
+ memo, Fragment, useEffect, useContext 
+} from 'react';
 import styled from 'styled-components';
 import play from '@/assets/icons/play-circle.svg';
 import pause from '@/assets/icons/pause.svg';
@@ -64,13 +66,19 @@ function PlayerControl({
 
   return (
     <Fragment>
-      <Button onClick={onPrevClick}>
+      <Button
+        onClick={onPrevClick}
+        title="上一首"
+      >
         <SVG src={prev} />
       </Button>
-      <Button onClick={onClick}>
+      <Button
+        onClick={onClick}
+        title={isPaused ? '播放' : '暫停'}
+      >
         <SVG src={isPaused ? play : pause} />
       </Button>
-      <Button onClick={onNextClick}>
+      <Button onClick={onNextClick} title="下一首">
         <SVG src={next} />
       </Button>
     </Fragment>
