@@ -28,6 +28,8 @@ class MusicPlayer extends Component {
 
   audioRef = createRef();
 
+  progressRef = createRef();
+
   state = {
     currentTime: 0,
     duration: 0,
@@ -101,7 +103,11 @@ class MusicPlayer extends Component {
       <Fragment>
         <Control>
           <Duration duration={currentTime} />
-          <SongProgress current={currentTime / duration} setCurrent={this.setCurrentTime} />
+          <SongProgress
+            ref={this.progressRef}
+            current={currentTime / duration}
+            setCurrent={this.setCurrentTime}
+          />
           <Audio
             ref={this.audioRef}
             onPlay={() => this.setState({ isPaused: false })}
