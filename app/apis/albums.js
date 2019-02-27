@@ -1,27 +1,17 @@
 import { ajax } from 'rxjs/ajax';
-import { range, timer, throwError } from 'rxjs';
-import { retryWhen, zip } from 'rxjs/operators';
+import { timer, throwError } from 'rxjs';
+import { retryWhen, mergeMap } from 'rxjs/operators';
 
 const BASE_API_URL = 'http://localhost:8080/api/albums';
 
-const createRetryAPI = src => ajax
+const createRetryAPI = (src, retryCount) => ajax
   .getJSON(src)
   .pipe(
     retryWhen(errors => errors.pipe(
-      zip(range(1, 5), (err, count) => (count < 5 ? timer(2 ** count, 1000) : throwError(err))),
+      mergeMap((err, count) => (count + 1 < retryCount ? timer(2 ** count * 1000) : throwError(err))),
     )),
   );
 
 // [TODO] use retry logic.
-export const getAlbumByID = id => fetch(`${BASE_API_URL}/${id}`).then((res) => {
-  if (!res.ok) {
-    throw Error('can not fetch API');
-  }
-  return res;
-});
-export const getAllAlbums = () => fetch(BASE_API_URL).then((res) => {
-  if (!res.ok) {
-    throw Error('can not fetch API');
-  }
-  return res;
-});
+export const getAlbumByID = id => createRetryAPI(`${BASE_API_URL}/${id}`, 5);
+export const getAllAlbums = () => createRetryAPI(BASE_API_URL, 5);
