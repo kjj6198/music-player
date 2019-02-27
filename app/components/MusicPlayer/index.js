@@ -37,7 +37,6 @@ class MusicPlayer extends Component {
   };
 
   componentDidMount = () => {
-    // debugger;
     this.player = Player.createPlayer({
       audio: this.audioRef.current,
       src: this.props.src,
@@ -90,9 +89,12 @@ class MusicPlayer extends Component {
 
   handleControlClick = () => {
     if (this.player) {
-      this.player.paused
-        ? this.setState({ isPaused: false }, () => this.player.play())
-        : this.setState({ isPaused: true }, () => this.player.pause());
+      // [NOTE]: we need to setState first and trigger play(pause) to make UI state sync.
+      if (this.player.paused) {
+        this.setState({ isPaused: false }, () => this.player.play());
+      } else {
+        this.setState({ isPaused: true }, () => this.player.pause());
+      }
     }
   };
 

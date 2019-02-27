@@ -1,5 +1,5 @@
 // [TODO] naming is not good.
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, useLayoutEffect } from 'react';
 import { fromEvent, animationFrameScheduler } from 'rxjs';
 import {
   throttleTime,
@@ -13,6 +13,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import styled from 'styled-components';
+import { mobileCSS } from '@/utils/media';
 
 export const SongProgressWrapper = styled.div`
   position: relative;
@@ -22,6 +23,10 @@ export const SongProgressWrapper = styled.div`
   height: 6px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.6);
+
+  ${mobileCSS`
+    max-width: 200px;
+  `}
 `;
 
 const Bar = styled.div`
