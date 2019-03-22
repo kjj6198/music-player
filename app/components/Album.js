@@ -36,10 +36,14 @@ const RectImage = styled.div`
 const Title = styled.h4`
   margin-top: 6px;
   margin-bottom: 4px;
-  max-width: ${props => props.size || 100}px;
+  max-width: ${props => props.size || 200}px;
   text-overflow: ellipsis;
   word-break: break-word;
   font-weight: 700;
+
+  ${mobileCSS`
+    max-width: 100px;
+  `}
 `;
 
 const Author = styled.span`
