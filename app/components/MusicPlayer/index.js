@@ -28,6 +28,8 @@ class MusicPlayer extends Component {
 
   audioRef = createRef();
 
+  progressRef = createRef();
+
   state = {
     currentTime: 0,
     duration: 0,
@@ -35,7 +37,6 @@ class MusicPlayer extends Component {
   };
 
   componentDidMount = () => {
-    // debugger;
     this.player = Player.createPlayer({
       audio: this.audioRef.current,
       src: this.props.src,
@@ -88,9 +89,12 @@ class MusicPlayer extends Component {
 
   handleControlClick = () => {
     if (this.player) {
-      this.player.paused
-        ? this.setState({ isPaused: false }, () => this.player.play())
-        : this.setState({ isPaused: true }, () => this.player.pause());
+      // [NOTE]: we need to setState first and trigger play(pause) to make UI state sync.
+      if (this.player.paused) {
+        this.setState({ isPaused: false }, () => this.player.play());
+      } else {
+        this.setState({ isPaused: true }, () => this.player.pause());
+      }
     }
   };
 
@@ -101,7 +105,11 @@ class MusicPlayer extends Component {
       <Fragment>
         <Control>
           <Duration duration={currentTime} />
-          <SongProgress current={currentTime / duration} setCurrent={this.setCurrentTime} />
+          <SongProgress
+            ref={this.progressRef}
+            current={currentTime / duration}
+            setCurrent={this.setCurrentTime}
+          />
           <Audio
             ref={this.audioRef}
             onPlay={() => this.setState({ isPaused: false })}

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { mobileCSS } from '@/utils/media';
 
 export const Wrapper = styled(Link).attrs(props => ({
   title: props.title,
@@ -25,15 +26,24 @@ const RectImage = styled.div`
   background-image: url(${props => props.imageURL});
   background-size: cover;
   background-repeat: no-repeat;
+
+  ${mobileCSS`
+    width: 100px;
+    padding-bottom: 100px;
+  `}
 `;
 
 const Title = styled.h4`
   margin-top: 6px;
   margin-bottom: 4px;
-  max-width: ${props => props.size}px;
+  max-width: ${props => props.size || 200}px;
   text-overflow: ellipsis;
   word-break: break-word;
   font-weight: 700;
+
+  ${mobileCSS`
+    max-width: 100px;
+  `}
 `;
 
 const Author = styled.span`

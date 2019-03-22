@@ -8,6 +8,7 @@ import likeFill from '@/assets/icons/like-fill.svg';
 import Duration from './MusicPlayer/Duration';
 
 import SVG from './SVG';
+import { mobileCSS } from '@/utils/media';
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,6 +30,10 @@ const SongTitle = styled.h4`
   font-size: 14px;
   font-weight: 400;
   vertical-align: middle;
+
+  ${mobileCSS`
+    font-size: 12px;
+  `}
 `;
 
 const PlayIcon = styled(SVG)`

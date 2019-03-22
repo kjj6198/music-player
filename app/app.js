@@ -38,7 +38,8 @@ const renderApp = () => {
 
 renderApp();
 
+// install service worker in production
 if (process.env.NODE_ENV === 'production') {
-  // eslint-disable-next-line import/no-extraneous-dependencies
+  // eslint-disable-next-line import/no-extraneous-dependencies, global-require
   require('offline-plugin/runtime').install();
 }

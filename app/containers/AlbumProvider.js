@@ -24,6 +24,7 @@ const AlbumPlaceholder = () => (
 
 export default function AlbumProvider({ id }) {
   const { store } = useStore();
+
   useAlbumAPI(id);
 
   if (store.albums) {

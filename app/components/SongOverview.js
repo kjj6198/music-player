@@ -5,12 +5,13 @@ import AudioProvider from './MusicPlayer/AudioProvider';
 import useStore from '@/hooks/useStore';
 import MusicPlayer from './MusicPlayer';
 import Songs from './Songs';
+import { mobileCSS } from '@/utils/media';
 
 const BottomWrapper = styled.div`
   width: 100%;
   height: 156px;
   margin: auto;
-  padding: 20px 0;
+  padding: 20px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -33,6 +34,11 @@ const BottomWrapper = styled.div`
   & > h6 {
     color: #4b4b4b;
   }
+
+  ${mobileCSS`
+    font-size: 10px;
+    padding: 10px;
+  `}
 `;
 
 const Wrapper = styled.div`
@@ -94,8 +100,9 @@ function nextSong(songs, currentSong, selectNext = true) {
     if (song.name === currentSong.name) {
       if (isLast) {
         [next] = songs;
+      } else {
+        next = songs[i + 1];
       }
-      next = songs[i + 1];
 
       if (isFirst) {
         [prev] = songs;
@@ -165,7 +172,6 @@ export default function SongOverview({ match }) {
             <h6>現正播放</h6>
             <h4>{currentSong.name.replace('.mp3', '')}</h4>
             <h5>{album.author}</h5>
-
             <AudioProvider>
               <MusicPlayer
                 src={currentSong.url}
@@ -176,6 +182,7 @@ export default function SongOverview({ match }) {
                 onError={console.log}
               />
             </AudioProvider>
+
           </Fragment>
         )}
       </BottomWrapper>

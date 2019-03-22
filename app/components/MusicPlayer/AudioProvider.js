@@ -1,4 +1,6 @@
-import React, { createContext, createRef, useState, memo } from 'react';
+import React, {
+  createContext, createRef, useState, memo,
+} from 'react';
 
 const initialState = {
   audio: null,
