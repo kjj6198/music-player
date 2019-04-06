@@ -1,5 +1,6 @@
 // [TODO] naming is not good.
-import React, { Component, createRef, useLayoutEffect } from 'react';
+// we can use this slider to display some continus value.
+import React, { Component, createRef } from 'react';
 import { fromEvent, animationFrameScheduler } from 'rxjs';
 import {
   throttleTime,
@@ -23,7 +24,7 @@ export const SongProgressWrapper = styled.div`
   height: 6px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.6);
-
+  /* TODO: better variable management */
   ${mobileCSS`
     max-width: 200px;
   `}
@@ -67,7 +68,12 @@ export const Indicator = styled.button.attrs(props => ({
   height: 15px;
   border-radius: 50%;
   appearance: none;
-  curosr: pointer;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  padding: 0;
+  will-change: left;
+  border: 1px solid #ccc;
   transform: translate(-7.5px);
   transform-origin: center;
   background-color: #fff;

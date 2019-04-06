@@ -1,5 +1,5 @@
 import React, {
- memo, Fragment, useEffect, useContext 
+  memo, Fragment, useEffect, useContext,
 } from 'react';
 import styled from 'styled-components';
 import play from '@/assets/icons/play-circle.svg';
@@ -8,6 +8,7 @@ import next from '@/assets/icons/next.svg';
 import prev from '@/assets/icons/prev.svg';
 import { playerContext } from './AudioProvider';
 import SVG from '../SVG';
+import useShortcut from '@/hooks/useShortcut';
 
 
 const Button = styled.button`
@@ -36,33 +37,13 @@ function PlayerControl({
 }) {
   const { audio } = useContext(playerContext);
 
-  useEffect(() => {
-    function handleKeyPress(e) {
-      switch (e.keyCode) {
-        case 32:
-          onClick();
-          break;
-        case 78:
-          onNextClick();
-          break;
-        case 80:
-          onPrevClick();
-          break;
-        case 37:
-          audio.currentTime -= 10;
-          break;
-        case 39:
-          audio.currentTime += 10;
-          break;
-        default:
-          break;
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyPress);
-
-    return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [audio, onPrevClick, onNextClick]);
+  useShortcut({
+    32: onClick,
+    78: onNextClick,
+    80: onPrevClick,
+    37: () => audio.currentTime -= 10,
+    39: () => audio.currentTime += 10,
+  });
 
   return (
     <Fragment>

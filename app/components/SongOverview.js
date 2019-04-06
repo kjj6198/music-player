@@ -6,19 +6,31 @@ import useStore from '@/hooks/useStore';
 import MusicPlayer from './MusicPlayer';
 import Songs from './Songs';
 import { mobileCSS } from '@/utils/media';
+import SongProgress from './MusicPlayer/SongProgress';
 
 const BottomWrapper = styled.div`
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 156px;
   margin: auto;
   padding: 20px;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   text-align: center;
   background-color: rgba(34, 34, 34);
+  display: flex;
+  
 
+  ${mobileCSS`
+    font-size: 10px;
+    padding: 10px;
+  `}
+`;
+
+const SongInfo = styled.div`
   & > h4,
   & > h5,
   & > h6 {
@@ -34,11 +46,6 @@ const BottomWrapper = styled.div`
   & > h6 {
     color: #4b4b4b;
   }
-
-  ${mobileCSS`
-    font-size: 10px;
-    padding: 10px;
-  `}
 `;
 
 const Wrapper = styled.div`
@@ -169,18 +176,23 @@ export default function SongOverview({ match }) {
       <BottomWrapper>
         {currentSong && (
           <Fragment>
-            <h6>現正播放</h6>
-            <h4>{currentSong.name.replace('.mp3', '')}</h4>
-            <h5>{album.author}</h5>
+            <SongInfo>
+              <h6>現正播放</h6>
+              <h4>{currentSong.name.replace('.mp3', '')}</h4>
+              <h5>{album.author}</h5>
+            </SongInfo>
             <AudioProvider>
-              <MusicPlayer
-                src={currentSong.url}
-                onNextClick={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
-                onPrevClick={() => dispatch({ type: 'SELECT_PREV_SONG', songs: album.songs })}
-                onLoaded={player => player.play()}
-                onEnded={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
-                onError={console.log}
-              />
+              <div style={{ flex: 1 }}>
+                <MusicPlayer
+                  src={currentSong.url}
+                  onNextClick={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
+                  onPrevClick={() => dispatch({ type: 'SELECT_PREV_SONG', songs: album.songs })}
+                  onLoaded={player => player.play()}
+                  onEnded={() => dispatch({ type: 'SELECT_NEXT_SONG', songs: album.songs })}
+                  onError={console.log}
+                />
+              </div>
+              <SongProgress />
             </AudioProvider>
 
           </Fragment>
